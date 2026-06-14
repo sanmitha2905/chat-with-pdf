@@ -1,1 +1,33 @@
-# chat-with-pdf
+# 📄 Chat with PDF — RAG App
+
+An AI-powered app that lets you upload any PDF and ask questions about it using Retrieval Augmented Generation (RAG).
+
+## 🚀 Live Demo
+[Click here to try it](your_streamlit_url_here)
+
+## 🛠️ Tech Stack
+- **LLM**: LLaMA 3.3 70B via Groq API
+- **Embeddings**: all-MiniLM-L6-v2 (HuggingFace)
+- **Vector Store**: ChromaDB (in-memory)
+- **Retrievers**: MultiQuery + Contextual Compression
+- **Framework**: LangChain + Streamlit
+
+## ⚙️ How it Works
+1. Upload any PDF
+2. PDF is split into chunks
+3. Chunks are embedded and stored in ChromaDB
+4. You ask a question
+5. MultiQuery Retriever finds relevant chunks
+6. Contextual Compression filters noise
+7. LLaMA 3.3 generates answer from chunks
+
+## 🔧 Run Locally
+```bash
+git clone https://github.com/sanmitha2905/chat-with-pdf
+cd chat-with-pdf
+pip install -r requirements.txt
+# Add your GROQ_API_KEY in .env file
+streamlit run app.py
+```
+
+## 📁 Project Structure
