@@ -3,12 +3,12 @@ from langchain_community.vectorstores import FAISS
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_groq import ChatGroq
 from langchain_community.document_loaders import PyPDFLoader
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain.retrievers.multi_query import MultiQueryRetriever
 from langchain.chains import RetrievalQA
 from langchain.retrievers.document_compressors import LLMChainFilter
 from langchain.retrievers import ContextualCompressionRetriever
-from langchain.schema import Document
+from langchain_core.documents import Document
 from dotenv import load_dotenv
 import os
 import tempfile
