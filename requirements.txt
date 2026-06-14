@@ -7,10 +7,9 @@ langchain-text-splitters
 langchain-chroma
 langchain-huggingface
 langchain-groq
-
-chromadb==0.4.24
-protobuf==4.25.3
-opentelemetry-api==1.25.0
-opentelemetry-sdk==1.25.0
-
+chromadb
+sentence-transformers
+pypdf
+pdfplumber
 python-dotenv
+groq
