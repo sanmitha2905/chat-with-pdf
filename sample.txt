@@ -1,0 +1,10 @@
+Artificial Intelligence is transforming every industry.
+Machine learning allows computers to learn from data.
+Deep learning uses neural networks with many layers.
+Natural language processing helps computers understand text.
+RAG stands for Retrieval Augmented Generation.
+LangChain is a framework for building LLM applications.
+ChromaDB is a vector database for storing embeddings.
+Streamlit is used to build AI web applications quickly.
+Python is the most popular language for AI development.
+Hyderabad is becoming a major hub for AI companies in India.
