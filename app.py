@@ -1,13 +1,14 @@
 import streamlit as st
-from langchain_chroma import Chroma
+from langchain_community.vectorstores import FAISS
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_groq import ChatGroq
 from langchain_community.document_loaders import PyPDFLoader
-from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_classic.retrievers.multi_query import MultiQueryRetriever
-from langchain_classic.chains import RetrievalQA
-from langchain_classic.retrievers.document_compressors import LLMChainFilter
-from langchain_classic.retrievers import ContextualCompressionRetriever
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.retrievers.multi_query import MultiQueryRetriever
+from langchain.chains import RetrievalQA
+from langchain.retrievers.document_compressors import LLMChainFilter
+from langchain.retrievers import ContextualCompressionRetriever
+from langchain.schema import Document
 from dotenv import load_dotenv
 import os
 import tempfile
@@ -46,9 +47,7 @@ with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp_file:
 # ---------------- LOAD & SPLIT ----------------
 with st.spinner("Reading your PDF..."):
     try:
-        # First try pdfplumber (better for formatted PDFs)
         import pdfplumber
-        from langchain_core.documents import Document
         
         text = ""
         with pdfplumber.open(tmp_path) as pdf:
@@ -60,11 +59,9 @@ with st.spinner("Reading your PDF..."):
         if text.strip():
             pages = [Document(page_content=text)]
         else:
-            # Fallback to PyPDFLoader
             loader = PyPDFLoader(tmp_path)
             pages = loader.load()
     except:
-        # Fallback to PyPDFLoader
         loader = PyPDFLoader(tmp_path)
         pages = loader.load()
 
@@ -73,9 +70,10 @@ with st.spinner("Reading your PDF..."):
         chunk_overlap=50
     )
     chunks = splitter.split_documents(pages)
+
 # ---------------- VECTOR STORE ----------------
 with st.spinner("Building knowledge base..."):
-    vectorstore = Chroma.from_documents(
+    vectorstore = FAISS.from_documents(
         documents=chunks,
         embedding=embeddings
     )
@@ -87,6 +85,7 @@ multi_query_retriever = MultiQueryRetriever.from_llm(
 )
 
 compressor = LLMChainFilter.from_llm(llm)
+
 retriever = ContextualCompressionRetriever(
     base_retriever=multi_query_retriever,
     base_compressor=compressor
@@ -116,6 +115,7 @@ user_question = st.chat_input("Ask something about your PDF...")
 
 if user_question:
     st.session_state.messages.append({"role": "user", "content": user_question})
+
     with st.chat_message("user"):
         st.write(user_question)
 
@@ -123,6 +123,7 @@ if user_question:
         with st.spinner("Thinking..."):
             result = qa_chain.invoke({"query": user_question})
             answer = result["result"]
+
             st.write(answer)
 
             with st.expander("📚 Source chunks used"):
